@@ -25,15 +25,17 @@ So what I have in terms of features so far are:
 - Dev Container Setup
 
 **Game**:
-- ???
+- A sky blue colored window
 
-Planned features are:
+Planned features (for next update/very distant future) are:
 
 **Dev**:
-- ???
+- Learn how to test and what you can test in a game
 
 **Game**:
-- A window
+- A tilemap that can be rendered into a nice map
+- A character sprite
+- Character movement
 
 ## Credits
 This project was started by [@TalinTheDev](http://github.com/TalinTheDev), 
