@@ -1,7 +1,7 @@
 // Copyright 2025 Talin Sharma. Subject to the Apache-2.0 license.
 .{
     .name = .rpg,
-    .version = "0.0.0",
+    .version = "0.1.0",
     .fingerprint = 0x54dde8217c205c63, // Changing this has security and trust implications.
 
     .minimum_zig_version = "0.14.0",

@@ -47,6 +47,12 @@ pub fn build(b: *std.Build) void {
     exe.root_module.addImport("raylib", raylib);
     exe.root_module.addImport("raygui", raygui);
 
+    b.installDirectory(.{
+        .source_dir = .{ .cwd_relative = "assets" },
+        .install_dir = .bin,
+        .install_subdir = "assets",
+    });
+
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);

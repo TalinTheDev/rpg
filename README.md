@@ -26,6 +26,7 @@ So what I have in terms of features so far are:
 
 **Game**:
 - A sky blue colored window
+- Player sprite from [kenney.nl](https://kenney.itch.io/creature-mixer)
 
 Planned features (for next update/very distant future) are:
 
@@ -34,7 +35,6 @@ Planned features (for next update/very distant future) are:
 
 **Game**:
 - A tilemap that can be rendered into a nice map
-- A character sprite
 - Character movement
 
 ## Credits
