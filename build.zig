@@ -1,3 +1,6 @@
+// Copyright 2025 Talin Sharma. Subject to the Apache-2.0 license.
+//! Build instructions for this project
+
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {

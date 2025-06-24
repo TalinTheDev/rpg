@@ -1,4 +1,5 @@
 #!/usr/bin/env fish
+# Copyright 2025 Talin Sharma. Subject to the Apache-2.0 license.
 
 # Install ZIG & ZLS using ZVM if it doesn't exist
 
