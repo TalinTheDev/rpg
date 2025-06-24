@@ -2,7 +2,7 @@
 //! Project root
 
 // Imports
-const lib = @import("rpg");
+const lib = @import("rpg_lib");
 const rl = @import("raylib");
 const std = @import("std");
 
@@ -12,11 +12,10 @@ pub fn main() !void {
     rl.initWindow(800, 600, "Hello World!");
     defer rl.closeWindow();
 
-    // Load player texture
-    const playerImage = try rl.loadImage("assets/sprites/player.png");
-    const playerTexture = try rl.loadTextureFromImage(playerImage);
-    defer rl.unloadImage(playerImage);
-    defer rl.unloadTexture(playerTexture);
+    // Initialize the player; Also defer de-initializing it
+    var p = lib.Player{};
+    var player: *lib.Player = try lib.Player.init(&p);
+    defer player.deinit();
 
     // While window should stay open...
     while (!rl.windowShouldClose()) {
@@ -24,12 +23,7 @@ pub fn main() !void {
         rl.beginDrawing();
         rl.clearBackground(rl.Color.sky_blue);
 
-        // Draw player
-        // rl.drawTexture(playerTexture, 50, 50, rl.Color.white);
-        rl.drawTextureEx(playerTexture, rl.Vector2{
-            .x = 50,
-            .y = 50,
-        }, 0.00, 2.5, rl.Color.white);
+        player.draw();
 
         // End drawing
         rl.endDrawing();
