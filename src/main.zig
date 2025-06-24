@@ -20,6 +20,9 @@ pub fn main() !void {
 
     // While window should stay open...
     while (!rl.windowShouldClose()) {
+        // Run updates
+        player.update(rl.getFrameTime());
+
         // Begin drawing and clear screen
         rl.beginDrawing();
         rl.clearBackground(rl.Color.sky_blue);
