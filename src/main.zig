@@ -10,6 +10,7 @@ const std = @import("std");
 pub fn main() !void {
     // Initialize window and OpenGL context; Also defer closing both
     rl.initWindow(800, 600, "Hello World!");
+    rl.setTargetFPS(60);
     defer rl.closeWindow();
 
     // Initialize the player; Also defer de-initializing it
