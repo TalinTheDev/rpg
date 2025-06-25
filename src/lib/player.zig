@@ -46,18 +46,35 @@ pub const Player = struct {
             .width = self.width,
             .height = self.height,
         };
+        self.calculateDestRec();
+        self.calculateOrigin();
+        return self;
+    }
+
+    /// Calculate the destination rectangle for the player sprite (also reset
+    /// position)
+    pub fn calculateDestRec(self: *Player) void {
         self.destRec = rl.Rectangle{
             .x = 50,
             .y = 50,
             .width = self.width * self.scale,
             .height = self.height * self.scale,
         };
+    }
+
+    /// Calculate the origin of the player sprite
+    pub fn calculateOrigin(self: *Player) void {
         self.origin = rl.Vector2{
             .x = @divExact(self.destRec.width, 2),
             .y = @divExact(self.destRec.height, 2),
         };
+    }
 
-        return self;
+    /// Change the scale of the player sprite
+    pub fn setScale(self: *Player, scale: f32) void {
+        self.scale = scale;
+        self.calculateDestRec();
+        self.calculateOrigin();
     }
 
     /// De-initialize player data
