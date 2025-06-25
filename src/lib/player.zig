@@ -52,7 +52,10 @@ pub const Player = struct {
             .width = self.width * self.scale,
             .height = self.height * self.scale,
         };
-        self.origin = rl.Vector2{ .x = self.width, .y = self.height };
+        self.origin = rl.Vector2{
+            .x = @divExact(self.destRec.width, 2),
+            .y = @divExact(self.destRec.height, 2),
+        };
 
         return self;
     }
