@@ -55,8 +55,8 @@ pub const Player = struct {
     /// position)
     pub fn calculateDestRec(self: *Player) void {
         self.destRec = rl.Rectangle{
-            .x = 50,
-            .y = 50,
+            .x = 0,
+            .y = 0,
             .width = self.width * self.scale,
             .height = self.height * self.scale,
         };

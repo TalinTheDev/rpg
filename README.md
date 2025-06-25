@@ -28,6 +28,7 @@ So what I have in terms of features so far are:
 - A sky blue colored window
 - Player sprite from [kenney.nl](https://kenney.itch.io/creature-mixer)
 - Player moves and also flips on horizontal movement
+- Camera follows player + orange circle at origin for reference
 
 Planned features (for next update/very distant future) are:
 
@@ -35,7 +36,7 @@ Planned features (for next update/very distant future) are:
 - Learn how to test and what you can test in a game
 
 **Game**:
-- A tilemap that can be rendered into a nice map
+- A tilemap that can be rendered into a nice environment
 - Diagonal movement shouldn't be faster
 
 ## Credits
