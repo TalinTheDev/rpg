@@ -5,20 +5,54 @@
 const rl = @import("raylib");
 const utils = @import("utils.zig");
 
+/// Contains player logic and data
 pub const Player = struct {
+    /// Image of sprite sheet
     image: rl.Image = undefined,
+    /// Texture from image
     texture: rl.Texture2D = undefined,
-    position: rl.Vector2 = undefined,
+    /// Number of sprites in the sheet
+    spriteCount: i32 = undefined,
+    /// Width of the spritesheet
+    width: f32 = undefined,
+    /// Height of the spritesheet
+    height: f32 = undefined,
+    /// Source rectangle of current frame from spritesheet
+    sourceRec: rl.Rectangle = undefined,
+    /// Rectangle of where to draw the sprite
+    destRec: rl.Rectangle = undefined,
+    /// Origin of sprite, around which rotation and scaling is done
+    origin: rl.Vector2 = undefined,
+
+    /// Sprite's rotation
     rotation: f32 = 0.00,
+    /// Sprite's scale
     scale: f32 = 2.5,
 
+    /// Sprite's speed
     speed: i32 = 100,
 
     /// Initialize player data
     pub fn init(self: *Player) !*Player {
-        self.position = rl.Vector2{ .x = 50, .y = 50 };
+        self.spriteCount = 1;
         self.image = try rl.loadImage("assets/sprites/player.png");
         self.texture = try rl.loadTextureFromImage(self.image);
+        self.width = @divExact(utils.itf(self.texture.width), utils.itf(self.spriteCount));
+        self.height = utils.itf(self.texture.height);
+
+        self.sourceRec = rl.Rectangle{
+            .x = 0,
+            .y = 0,
+            .width = self.width,
+            .height = self.height,
+        };
+        self.destRec = rl.Rectangle{
+            .x = 50,
+            .y = 50,
+            .width = self.width * self.scale,
+            .height = self.height * self.scale,
+        };
+        self.origin = rl.Vector2{ .x = self.width, .y = self.height };
 
         return self;
     }
@@ -31,20 +65,23 @@ pub const Player = struct {
 
     /// Draws player
     pub fn draw(self: *Player) void {
-        rl.drawTextureEx(self.texture, self.position, self.rotation, self.scale, rl.Color.white);
+        rl.drawTexturePro(self.texture, self.sourceRec, self.destRec, self.origin, self.rotation, rl.Color.white);
     }
 
     /// Update player
     pub fn update(self: *Player, delta: f32) void {
+        // Movement & sprite flipping from input
         if (rl.isKeyDown(.w)) {
-            self.position.y -= utils.itf(self.speed) * delta;
+            self.destRec.y -= utils.itf(self.speed) * delta;
         } else if (rl.isKeyDown(.s)) {
-            self.position.y += utils.itf(self.speed) * delta;
+            self.destRec.y += utils.itf(self.speed) * delta;
         }
         if (rl.isKeyDown(.d)) {
-            self.position.x += utils.itf(self.speed) * delta;
+            self.destRec.x += utils.itf(self.speed) * delta;
+            self.sourceRec.width = self.width;
         } else if (rl.isKeyDown(.a)) {
-            self.position.x -= utils.itf(self.speed) * delta;
+            self.destRec.x -= utils.itf(self.speed) * delta;
+            self.sourceRec.width = -1 * self.width;
         }
     }
 };

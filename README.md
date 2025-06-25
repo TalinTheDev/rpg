@@ -27,6 +27,7 @@ So what I have in terms of features so far are:
 **Game**:
 - A sky blue colored window
 - Player sprite from [kenney.nl](https://kenney.itch.io/creature-mixer)
+- Player moves and also flips on horizontal movement
 
 Planned features (for next update/very distant future) are:
 
@@ -35,7 +36,7 @@ Planned features (for next update/very distant future) are:
 
 **Game**:
 - A tilemap that can be rendered into a nice map
-- Character movement
+- Diagonal movement shouldn't be faster
 
 ## Credits
 This project was started by [@TalinTheDev](http://github.com/TalinTheDev), 
