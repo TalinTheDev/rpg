@@ -9,14 +9,17 @@ const std = @import("std");
 // Game entry point
 pub fn main() !void {
     // Initialize window and OpenGL context; Also defer closing both
-    rl.initWindow(800, 600, "Hello World!");
+    rl.initWindow(800, 600, "RPG");
     rl.setTargetFPS(60);
     defer rl.closeWindow();
 
+    // Initialize an Arena Allocator for general purpose use; Also defer de-initializing it
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
+
     // Initialize the player; Also defer de-initializing it
-    var p = lib.Player{};
-    var player: *lib.Player = try lib.Player.init(&p);
-    defer player.deinit();
+    const player = try lib.Player.init(allocator, "assets/sprites/player.png");
 
     // Setup camera
     var camera = rl.Camera2D{
@@ -36,8 +39,8 @@ pub fn main() !void {
     while (!rl.windowShouldClose()) {
         // Run updates
         player.update(rl.getFrameTime());
-        camera.target.x = player.destRec.x;
-        camera.target.y = player.destRec.y;
+        camera.target.x = player.sprite.dest.x;
+        camera.target.y = player.sprite.dest.y;
 
         // Begin drawing and clear screen
         rl.beginDrawing();
@@ -46,9 +49,10 @@ pub fn main() !void {
         rl.beginMode2D(camera);
 
         rl.drawCircle(0, 0, 25, rl.Color.orange); // Reference circle
-        player.draw();
+        player.sprite.draw();
 
         rl.endMode2D();
+        rl.drawFPS(50, 50);
 
         // End drawing
         rl.endDrawing();
