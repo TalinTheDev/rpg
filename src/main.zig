@@ -20,6 +20,7 @@ pub fn main() !void {
 
     // Initialize the player; Also defer de-initializing it
     const player = try lib.Player.init(allocator, "assets/sprites/player.png");
+    defer player.sprite.sheet.deinit();
 
     // Setup camera
     var camera = rl.Camera2D{
