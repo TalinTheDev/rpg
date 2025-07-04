@@ -3,5 +3,6 @@
 
 // Re-exports
 pub usingnamespace @import("sprite.zig");
+pub usingnamespace @import("state.zig");
 pub usingnamespace @import("player.zig");
 pub usingnamespace @import("utils.zig");
