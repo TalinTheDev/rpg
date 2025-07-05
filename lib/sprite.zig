@@ -64,7 +64,7 @@ pub const SpriteSheet = struct {
     }
 
     /// Returns a Sprite from a SpriteSheet
-    pub fn getSprite(self: *SpriteSheet, posX: i32, posY: i32, x: i32, y: i32, rotation: f32, scale: f32, speed: f32) Sprite {
+    pub fn getSprite(self: *SpriteSheet, posX: i32, posY: i32, x: i32, y: i32, rotation: f32, scale: f32, speed: f32, animated: bool, frameCount: i32) Sprite {
         return Sprite{
             .sheet = self,
 
@@ -88,6 +88,9 @@ pub const SpriteSheet = struct {
             .rotation = rotation,
             .scale = scale,
             .speed = speed,
+
+            .animated = animated,
+            .frameCount = frameCount,
         };
     }
 };
@@ -104,7 +107,21 @@ pub const Sprite = struct {
     scale: f32 = 2.5,
     speed: f32,
 
+    animated: bool,
+    animationSpeed: f32 = 5,
+    currentFrame: i32 = 1,
+    frameCount: i32,
+    counter: i32 = 0,
+
     pub fn draw(self: *Sprite) void {
+        if (utils.itf(self.counter) == self.animationSpeed) {
+            self.currentFrame += 1;
+            self.counter = 0;
+        }
+        if (self.currentFrame > self.frameCount)
+            self.currentFrame = 1;
+        self.source.x = utils.itf(self.currentFrame) * self.sheet.spriteWidth;
         rl.drawTexturePro(self.sheet.texture, self.source, self.dest, self.origin, self.rotation, rl.Color.white);
+        self.counter += 1;
     }
 };

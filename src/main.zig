@@ -53,7 +53,6 @@ pub fn main() !void {
         player.sprite.draw();
 
         rl.endMode2D();
-        rl.drawFPS(50, 50);
 
         // End drawing
         rl.endDrawing();

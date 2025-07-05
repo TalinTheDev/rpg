@@ -21,7 +21,7 @@ pub const Player = struct {
             .sheetHeight = 24,
         });
 
-        const sprite = sheet.getSprite(0, 0, 0, 0, 0.0, 2.5, lib.CONFIG.PLAYER_SPEED);
+        const sprite = sheet.getSprite(0, 0, 0, 0, 0.0, lib.CONFIG.PLAYER_SCALE, lib.CONFIG.PLAYER_SPEED, true, 4);
 
         const player = try alloc.create(Player);
         player.* = .{
