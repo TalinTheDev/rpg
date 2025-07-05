@@ -29,6 +29,7 @@ So what I have in terms of features so far are:
 - Player sprite from [kenney.nl](https://kenney.itch.io/creature-mixer)
 - Player moves and also flips on horizontal movement
 - Camera follows player + orange circle at origin for reference
+- Player has an idle and a walking/running animation
 
 Planned features (for next update/very distant future) are:
 

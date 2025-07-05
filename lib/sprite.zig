@@ -97,31 +97,53 @@ pub const SpriteSheet = struct {
 
 /// Represents a singular sprite
 pub const Sprite = struct {
+    /// The SpriteSheet
     sheet: *SpriteSheet,
 
+    /// Rectangle representing the sprite on the SpriteSheet
     source: rl.Rectangle,
+    /// Rectangle representing the position of the rendered sprite
     dest: rl.Rectangle,
+    /// Sprite's rotation/scaling origin; relative to the destination rectangle
     origin: rl.Vector2,
 
+    /// Sprite's rotation
     rotation: f32 = 0.00,
+    /// Sprite's scale
     scale: f32 = 2.5,
+    /// Sprite's movement speed
     speed: f32,
 
+    /// Whether or not to run sprite animations
     animated: bool,
-    animationSpeed: f32 = 5,
-    currentFrame: i32 = 1,
+
+    /// Sprite's animation speed; will be divided by the number of frames to determine the actual speed
+    animationSpeed: f32 = 20,
+    /// Represents the current frame of the animation
+    currentFrame: i32 = 0,
+    /// Number of frames in the animation
     frameCount: i32,
+    /// Animation tick counter
     counter: i32 = 0,
 
+    /// Draws the sprite
     pub fn draw(self: *Sprite) void {
-        if (utils.itf(self.counter) == self.animationSpeed) {
-            self.currentFrame += 1;
-            self.counter = 0;
+        // Calculate when to update the animation frame if this sprite is animated
+        if (self.animated) {
+            if (utils.itf(self.counter) == (self.animationSpeed / utils.itf(self.frameCount))) {
+                self.currentFrame += 1;
+                self.counter = 0;
+            }
+            // Make sure we stay within the number of frames
+            if (self.currentFrame > self.frameCount)
+                self.currentFrame = 0 - (self.frameCount - self.currentFrame);
+
+            // Update frame location on sprite sheet
+            self.source.x = utils.itf(self.currentFrame) * @abs(self.sheet.spriteWidth);
+
+            // Update counter
+            self.counter += 1;
         }
-        if (self.currentFrame > self.frameCount)
-            self.currentFrame = 1;
-        self.source.x = utils.itf(self.currentFrame) * self.sheet.spriteWidth;
         rl.drawTexturePro(self.sheet.texture, self.source, self.dest, self.origin, self.rotation, rl.Color.white);
-        self.counter += 1;
     }
 };

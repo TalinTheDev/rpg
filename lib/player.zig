@@ -9,7 +9,10 @@ const std = @import("std");
 
 /// Contains player logic and data
 pub const Player = struct {
+    /// The sprite for this player
     sprite: lib.Sprite,
+    /// Whether or not the sprite should play the idle animation
+    idle: bool = true,
 
     /// Returns a Player created from a sprite sheet at [path]
     pub fn init(alloc: std.mem.Allocator, path: [:0]const u8) !*Player {
@@ -21,7 +24,7 @@ pub const Player = struct {
             .sheetHeight = 24,
         });
 
-        const sprite = sheet.getSprite(0, 0, 0, 0, 0.0, lib.CONFIG.PLAYER_SCALE, lib.CONFIG.PLAYER_SPEED, true, 4);
+        const sprite = sheet.getSprite(0, 0, 0, 0, 0.0, lib.CONFIG.PLAYER_SCALE, lib.CONFIG.PLAYER_SPEED, true, 2);
 
         const player = try alloc.create(Player);
         player.* = .{
@@ -32,18 +35,39 @@ pub const Player = struct {
 
     /// Update player
     pub fn update(self: *Player, delta: f32) void {
+        const lastAnimState = self.idle;
+        self.idle = true;
         // Movement/sprite flipping from input
         if (rl.isKeyDown(.w)) {
             self.sprite.dest.y -= self.sprite.speed * delta;
+            self.idle = false;
         } else if (rl.isKeyDown(.s)) {
             self.sprite.dest.y += self.sprite.speed * delta;
+            self.idle = false;
         }
         if (rl.isKeyDown(.d)) {
             self.sprite.dest.x += self.sprite.speed * delta;
             self.sprite.source.width = self.sprite.sheet.sheetWidth;
+            self.idle = false;
         } else if (rl.isKeyDown(.a)) {
             self.sprite.dest.x -= self.sprite.speed * delta;
             self.sprite.source.width = -1 * self.sprite.sheet.sheetWidth;
+            self.idle = false;
+        }
+
+        // Toggle between idle animation (frames 1-2) and walking animation (frames 1-4)
+        if (self.idle) {
+            self.sprite.frameCount = 2;
+            if (lastAnimState == false) {
+                self.sprite.currentFrame = 0;
+                self.sprite.counter = 0;
+            }
+        } else {
+            self.sprite.frameCount = 4;
+            if (lastAnimState == true) {
+                self.sprite.currentFrame = 0;
+                self.sprite.counter = 0;
+            }
         }
     }
 };
