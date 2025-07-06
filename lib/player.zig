@@ -20,8 +20,8 @@ pub const Player = struct {
             .spriteCount = 1,
             .spriteWidth = 24,
             .spriteHeight = 24,
-            .sheetWidth = 24,
-            .sheetHeight = 24,
+            .sheetWidth = 96,
+            .sheetHeight = 48,
         });
 
         const sprite = sheet.getSprite(0, 0, 0, 0, 0.0, lib.CONFIG.PLAYER_SCALE, lib.CONFIG.PLAYER_SPEED, true, 2);
@@ -35,9 +35,11 @@ pub const Player = struct {
 
     /// Update player
     pub fn update(self: *Player, delta: f32) void {
+        // Reset idle state
         const lastAnimState = self.idle;
         self.idle = true;
-        // Movement/sprite flipping from input
+
+        // Handle input and flip sprite if needed; also change idle state
         if (rl.isKeyDown(.w)) {
             self.sprite.dest.y -= self.sprite.speed * delta;
             self.idle = false;
@@ -47,27 +49,27 @@ pub const Player = struct {
         }
         if (rl.isKeyDown(.d)) {
             self.sprite.dest.x += self.sprite.speed * delta;
-            self.sprite.source.width = self.sprite.sheet.sheetWidth;
+            self.sprite.source.width = self.sprite.sheet.spriteWidth;
             self.idle = false;
         } else if (rl.isKeyDown(.a)) {
             self.sprite.dest.x -= self.sprite.speed * delta;
-            self.sprite.source.width = -1 * self.sprite.sheet.sheetWidth;
+            self.sprite.source.width = -1 * self.sprite.sheet.spriteWidth;
             self.idle = false;
         }
 
         // Toggle between idle animation (frames 1-2) and walking animation (frames 1-4)
         if (self.idle) {
+            self.sprite.currentAnimation = 1;
             self.sprite.frameCount = 2;
-            if (lastAnimState == false) {
-                self.sprite.currentFrame = 0;
-                self.sprite.counter = 0;
-            }
         } else {
+            self.sprite.currentAnimation = 2;
             self.sprite.frameCount = 4;
-            if (lastAnimState == true) {
-                self.sprite.currentFrame = 0;
-                self.sprite.counter = 0;
-            }
+        }
+
+        // Reset animation state if a new animation is going to be played
+        if (lastAnimState != self.idle) {
+            self.sprite.currentFrame = 1;
+            self.sprite.counter = 0;
         }
     }
 };

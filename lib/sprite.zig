@@ -116,11 +116,12 @@ pub const Sprite = struct {
 
     /// Whether or not to run sprite animations
     animated: bool,
-
+    /// Current Animation (number representing row of sprite sheet the current animation is on)
+    currentAnimation: i32 = 1,
     /// Sprite's animation speed; will be divided by the number of frames to determine the actual speed
     animationSpeed: f32 = 20,
     /// Represents the current frame of the animation
-    currentFrame: i32 = 0,
+    currentFrame: i32 = 1,
     /// Number of frames in the animation
     frameCount: i32,
     /// Animation tick counter
@@ -130,16 +131,18 @@ pub const Sprite = struct {
     pub fn draw(self: *Sprite) void {
         // Calculate when to update the animation frame if this sprite is animated
         if (self.animated) {
+            // Update frame if needed
             if (utils.itf(self.counter) == (self.animationSpeed / utils.itf(self.frameCount))) {
                 self.currentFrame += 1;
                 self.counter = 0;
             }
             // Make sure we stay within the number of frames
             if (self.currentFrame > self.frameCount)
-                self.currentFrame = 0 - (self.frameCount - self.currentFrame);
+                self.currentFrame = 1;
 
             // Update frame location on sprite sheet
-            self.source.x = utils.itf(self.currentFrame) * @abs(self.sheet.spriteWidth);
+            self.source.x = utils.itf(self.currentFrame - 1) * self.sheet.spriteWidth;
+            self.source.y = utils.itf(self.currentAnimation - 1) * self.sheet.spriteHeight;
 
             // Update counter
             self.counter += 1;

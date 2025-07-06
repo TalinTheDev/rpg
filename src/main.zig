@@ -19,7 +19,7 @@ pub fn main() !void {
     const allocator = arena.allocator();
 
     // Initialize the player; Also defer de-initializing it
-    const player = try lib.Player.init(allocator, "assets/sprites/player.png");
+    const player = try lib.Player.init(allocator, "assets/sprites/player/player.png");
     defer player.sprite.sheet.deinit();
 
     // Setup camera
