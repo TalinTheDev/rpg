@@ -30,6 +30,7 @@ So what I have in terms of features so far are:
 - Player moves and also flips on horizontal movement
 - Camera follows player + orange circle at origin for reference
 - Player has an idle and a walking/running animation
+- Tilemap from [Pixle_Poem](https://pixel-poem.itch.io/dungeon-assetpuck)
 
 Planned features (for next update/very distant future) are:
 
