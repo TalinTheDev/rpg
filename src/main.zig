@@ -8,19 +8,32 @@ const std = @import("std");
 
 // Game entry point
 pub fn main() !void {
-    // Initialize window and OpenGL context; Also defer closing both
+    // Initialize window and OpenGL context; also defer closing both
     rl.initWindow(800, 600, "RPG");
     rl.setTargetFPS(60);
     defer rl.closeWindow();
 
-    // Initialize an Arena Allocator for general purpose use; Also defer de-initializing it
+    // Initialize an Arena Allocator for general purpose use; also defer de-initializing it
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    // Initialize the player; Also defer de-initializing it
+    // Initialize the player; also defer de-initializing it
     const player = try lib.Player.init(allocator, "assets/sprites/player/player.png");
     defer player.sprite.sheet.deinit();
+
+    // Initialize the map tilemap and some test tiles; also defer de-initializing them
+    const map = try lib.SpriteSheet.init(allocator, "assets/map/island.png", .{
+        .sheetWidth = 216,
+        .sheetHeight = 192,
+        .spriteWidth = 24,
+        .spriteHeight = 24,
+        .spriteCount = 1,
+    });
+    var grass = map.getSprite(0, 0, 0, 0, 0, 2.5, 0, false, 0);
+    var water1 = map.getSprite(0, 6, 60, -60, 0, 2.5, 0, false, 0);
+    var water = map.getSprite(0, 7, 60, 0, 0, 2.5, 0, false, 0);
+    defer map.deinit();
 
     // Setup camera
     var camera = rl.Camera2D{
@@ -49,7 +62,12 @@ pub fn main() !void {
 
         rl.beginMode2D(camera);
 
-        rl.drawCircle(0, 0, 25, rl.Color.orange); // Reference circle
+        // Draw map tiles
+        grass.draw();
+        water.draw();
+        water1.draw();
+
+        // Draw the player
         player.sprite.draw();
 
         rl.endMode2D();
