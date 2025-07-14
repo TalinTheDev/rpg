@@ -23,17 +23,17 @@ pub fn main() !void {
     defer player.sprite.sheet.deinit();
 
     // Initialize the map tilemap and some test tiles; also defer de-initializing them
-    const map = try lib.SpriteSheet.init(allocator, "assets/map/island.png", .{
-        .sheetWidth = 216,
+    const tileMap = try lib.SpriteSheet.init(allocator, "assets/map/island.png", .{
+        .sheetWidth = 192,
         .sheetHeight = 192,
         .spriteWidth = 24,
         .spriteHeight = 24,
         .spriteCount = 1,
     });
-    var grass = map.getSprite(0, 0, 0, 0, 0, 2.5, 0, false, 0);
-    var water1 = map.getSprite(0, 6, 60, -60, 0, 2.5, 0, false, 0);
-    var water = map.getSprite(0, 7, 60, 0, 0, 2.5, 0, false, 0);
-    defer map.deinit();
+    // var grass = tileMap.getSprite(0, 0, 0, 0, 0, 2.5, 0, false, 0);
+    // var water1 = tileMap.getSprite(0, 6, 60, -60, 0, 2.5, 0, false, 0);
+    // var water = tileMap.getSprite(0, 7, 60, 0, 0, 2.5, 0, false, 0);
+    defer tileMap.deinit();
 
     // Setup camera
     var camera = rl.Camera2D{
@@ -47,6 +47,34 @@ pub fn main() !void {
         },
         .rotation = 0.0,
         .zoom = 1.0,
+    };
+    const Tiles = enum {
+        grass,
+        water,
+    };
+    const Tile = struct {
+        tileName: Tiles,
+        pos: struct {
+            row: u8,
+            col: u8,
+        },
+    };
+    const map = [3][3]Tile{
+        [_]Tile{
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+        },
+        [_]Tile{
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+            .{ .tileName = .water, .pos = .{ .row = 5, .col = 5 } },
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+        },
+        [_]Tile{
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+            .{ .tileName = .grass, .pos = .{ .row = 0, .col = 0 } },
+        },
     };
 
     // While window should stay open...
@@ -63,9 +91,12 @@ pub fn main() !void {
         rl.beginMode2D(camera);
 
         // Draw map tiles
-        grass.draw();
-        water.draw();
-        water1.draw();
+        for (map, 0..) |row, i| {
+            for (row, 0..) |tile, j| {
+                var sprite = tileMap.getSprite(tile.pos.col, tile.pos.row, @as(u64, j) * 60, @as(u64, i) * 60, 0, 2.5, 0, false, 1);
+                sprite.draw();
+            }
+        }
 
         // Draw the player
         player.sprite.draw();

@@ -64,7 +64,7 @@ pub const SpriteSheet = struct {
     }
 
     /// Returns a Sprite from a SpriteSheet
-    pub fn getSprite(self: *SpriteSheet, posX: i32, posY: i32, x: i32, y: i32, rotation: f32, scale: f32, speed: f32, animated: bool, frameCount: i32) Sprite {
+    pub fn getSprite(self: *SpriteSheet, posX: i32, posY: i32, x: u64, y: u64, rotation: f32, scale: f32, speed: f32, animated: bool, frameCount: i32) Sprite {
         return Sprite{
             .sheet = self,
 
@@ -75,8 +75,8 @@ pub const SpriteSheet = struct {
                 .height = self.spriteHeight,
             },
             .dest = rl.Rectangle{
-                .x = utils.itf(x),
-                .y = utils.itf(y),
+                .x = @as(f32, @floatFromInt(x)),
+                .y = @as(f32, @floatFromInt(y)),
                 .width = self.spriteWidth * scale,
                 .height = self.spriteHeight * scale,
             },
